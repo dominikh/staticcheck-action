@@ -1,0 +1,69 @@
+name: "Staticcheck"
+description: "Run Staticcheck on your Go code"
+author: "Dominik Honnef"
+branding:
+  icon: "alert-triangle"
+  color: "blue"
+inputs:
+  version:
+    description: |
+      The version of Staticcheck to use. Because new versions of
+      Staticcheck introduce new checks that may break your build, it
+      is recommended to pin to a specific version and to update
+      Staticheck consciously.
+    required: true
+    default: "latest"
+  min-go-version:
+    description: |
+      Minimum version of Go to support. This affects the diagnostics
+      reported by Staticcheck, avoiding suggestions that are not
+      applicable to older versions of Go.
+
+      If unset, this will default to the Go version specified in your
+      go.mod.
+      
+      See https://staticcheck.io/docs/running-staticcheck/cli/#go
+      for more information.
+    required: false
+  build-tags:
+    description: "Build tags"
+    required: false
+  install-go:
+    description: |
+      Let the action install a version of Go appropriate for building and running Staticcheck.
+      If set to false, the action expects you to have installed Go already.
+      The latest release of Staticcheck works with the last two minor releases of Go.
+      The minimum version required by this action is Go 1.17.
+    required: true
+    default: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ${{ runner.temp }}/staticcheck
+          ${{ runner.temp }}/go-build
+        # use a unique cache key for storing, then restore from the newest cache entry we can.
+        key: staticcheck-${{ runner.os }}-${{ github.sha }}
+        restore-keys: |
+          staticcheck-${{ runner.os }}
+    - if: ${{ inputs.install-go != 'false' }}
+      uses: WillAbides/setup-go-faster@v1.5.0
+      with:
+        go-version: "1.17.x"
+    - env:
+        version: ${{ inputs.version }}
+        buildTags: ${{ inputs.build-tags }}
+        minGoVersion: ${{ inputs.min-go-version }}
+      run: |
+        export GOCACHE="${{ runner.temp }}/go-build"
+        export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
+        go install "honnef.co/go/tools/cmd/staticcheck@${version}"
+        echo "::add-matcher::$GITHUB_ACTION_PATH/matchers.json"
+        if [ -z "${minGoVersion}" ]; then
+          $(go env GOPATH)/bin/staticcheck -tags "${buildTags}" ./...
+        else
+          $(go env GOPATH)/bin/staticcheck -go "${minGoVersion}" -tags "${buildTags}" ./...
+        fi
+      shell: bash
