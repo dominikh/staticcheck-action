@@ -43,7 +43,6 @@ runs:
       with:
         path: |
           ${{ runner.temp }}/staticcheck
-          ${{ runner.temp }}/go-build
         # use a unique cache key for storing, then restore from the newest cache entry we can.
         key: staticcheck-${{ runner.os }}-${{ github.sha }}
         restore-keys: |
@@ -57,7 +56,6 @@ runs:
         buildTags: ${{ inputs.build-tags }}
         minGoVersion: ${{ inputs.min-go-version }}
       run: |
-        export GOCACHE="${{ runner.temp }}/go-build"
         export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
         go install "honnef.co/go/tools/cmd/staticcheck@${version}"
         echo "::add-matcher::$GITHUB_ACTION_PATH/matchers.json"
