@@ -36,6 +36,11 @@ inputs:
       The action itself requires at least Go 1.16.
     required: true
     default: true
+  cache-key:
+    description: |
+      String to include in the cache key, in addition to the default, which is runner.os.
+      This is useful when using multiple Go versions.
+    required: false
 runs:
   using: "composite"
   steps:
@@ -44,9 +49,9 @@ runs:
         path: |
           ${{ runner.temp }}/staticcheck
         # use a unique cache key for storing, then restore from the newest cache entry we can.
-        key: staticcheck-${{ runner.os }}-${{ github.sha }}
+        key: staticcheck-${{ runner.os }}-${{ inputs.cache-key }}-${{ github.sha }}
         restore-keys: |
-          staticcheck-${{ runner.os }}
+          staticcheck-${{ runner.os }}-${{ inputs.cache-key }}-
     - if: ${{ inputs.install-go != 'false' }}
       uses: WillAbides/setup-go-faster@v1.5.0
       with:
