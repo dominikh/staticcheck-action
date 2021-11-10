@@ -44,18 +44,20 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - id: install_go
+      if: ${{ inputs.install-go != 'false' }}
+      uses: WillAbides/setup-go-faster@v1.7.0
+      with:
+        go-version: "1.17.x"
     - uses: actions/cache@v2
       with:
         path: |
           ${{ runner.temp }}/staticcheck
+          ${{ inputs.install-go != 'false' && steps.install_go.outputs.GOCACHE || '' }}
         # use a unique cache key for storing, then restore from the newest cache entry we can.
         key: staticcheck-${{ runner.os }}-${{ inputs.cache-key }}-${{ github.sha }}
         restore-keys: |
           staticcheck-${{ runner.os }}-${{ inputs.cache-key }}-
-    - if: ${{ inputs.install-go != 'false' }}
-      uses: WillAbides/setup-go-faster@v1.7.0
-      with:
-        go-version: "1.17.x"
     - env:
         version: ${{ inputs.version }}
         buildTags: ${{ inputs.build-tags }}
