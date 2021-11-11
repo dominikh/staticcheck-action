@@ -77,7 +77,7 @@ runs:
         fi
         if [ "${useSarif}" != "false" ]; then
           args+=('-f' 'sarif')
-          $(go env GOPATH)/bin/staticcheck "${args[@]}" ./... >results.sarif || true
+          $(go env GOPATH)/bin/staticcheck "${args[@]}" -show-ignored ./... >results.sarif || true
         else
           $(go env GOPATH)/bin/staticcheck "${args[@]}" ./...
         fi
