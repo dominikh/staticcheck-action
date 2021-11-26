@@ -28,6 +28,12 @@ inputs:
   build-tags:
     description: "Build tags"
     required: false
+  checks:
+    description: |
+      Value to pass to Staticcheck in the -checks flag. This doesn't
+      normally need to be set.
+    required: false
+    default: "inherit"
   install-go:
     description: |
       Let the action install a version of Go appropriate for building and running Staticcheck.
@@ -62,13 +68,14 @@ runs:
         version: ${{ inputs.version }}
         buildTags: ${{ inputs.build-tags }}
         minGoVersion: ${{ inputs.min-go-version }}
+        checks: ${{ inputs.checks }}
       run: |
         export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
         go install "honnef.co/go/tools/cmd/staticcheck@${version}"
         echo "::add-matcher::$GITHUB_ACTION_PATH/matchers.json"
         if [ -z "${minGoVersion}" ]; then
-          $(go env GOPATH)/bin/staticcheck -tags "${buildTags}" ./...
+          $(go env GOPATH)/bin/staticcheck -tags "${buildTags}" -checks "${checks}" ./...
         else
-          $(go env GOPATH)/bin/staticcheck -go "${minGoVersion}" -tags "${buildTags}" ./...
+          $(go env GOPATH)/bin/staticcheck -go "${minGoVersion}" -tags "${buildTags}" -checks "${checks}" ./...
         fi
       shell: bash
