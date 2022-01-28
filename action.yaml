@@ -21,7 +21,7 @@ inputs:
 
       If unset, this will default to the Go version specified in your
       go.mod.
-      
+
       See https://staticcheck.io/docs/running-staticcheck/cli/#go
       for more information.
     required: false
@@ -47,6 +47,12 @@ inputs:
       String to include in the cache key, in addition to the default, which is runner.os.
       This is useful when using multiple Go versions.
     required: false
+  path:
+    description: |
+      The relative path to the working directory in $GITHUB_WORKSPACE staticcheck should be executed in.
+    required: false
+    default: "."
+
 runs:
   using: "composite"
   steps:
@@ -69,6 +75,7 @@ runs:
         buildTags: ${{ inputs.build-tags }}
         minGoVersion: ${{ inputs.min-go-version }}
         checks: ${{ inputs.checks }}
+      working-directory: ${{ inputs.path }}
       run: |
         export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
         go install "honnef.co/go/tools/cmd/staticcheck@${version}"
