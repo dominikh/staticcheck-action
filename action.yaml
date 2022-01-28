@@ -49,7 +49,7 @@ inputs:
     required: false
   path:
     description: |
-      The relative path to the working directory in $GITHUB_WORKSPACE staticcheck should be executed in.
+      Relative path to the working directory in $GITHUB_WORKSPACE staticcheck should be executed in.
     required: false
     default: "."
 
