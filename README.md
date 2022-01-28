@@ -16,10 +16,10 @@ jobs:
     name: "Run CI"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - uses: dominikh/staticcheck-action@v1.0.0
+    - uses: dominikh/staticcheck-action@v1.1.0
       with:
         version: "2021.1.1"
 ```
@@ -36,11 +36,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ["windows-latest", "ubuntu-latest", "macOS-latest"]
-        go: ["1.16.x", "1.17.x"]
+        os:  ["windows-latest", "ubuntu-latest", "macOS-latest"]
+        go:  ["1.16.x", "1.17.x"]
+        dir: ["server", "client"]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 1
     - uses: WillAbides/setup-go-faster@v1.7.0
@@ -48,11 +49,12 @@ jobs:
         go-version: ${{ matrix.go }}
     - run: "go test ./..."
     - run: "go vet ./..."
-    - uses: dominikh/staticcheck-action@v1.0.0
+    - uses: dominikh/staticcheck-action@v1.1.0
       with:
         version: "2021.1.1"
         install-go: false
         cache-key: ${{ matrix.go }}
+        working-directory: ${{ matrix.dir }}
 ```
 
 
@@ -96,3 +98,12 @@ The action itself requires at least Go 1.16.
 
 String to include in the cache key, in addition to the default, which is `runner.os`.
 This is useful when using multiple Go versions.
+
+### `working-directory`
+
+Relative path to the working directory Staticcheck should be executed in.
+This is useful when dealing with multiple projects within one repository.
+
+Can be easily combined with a directory [`matrix`](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix),
+see the advanced example above.
+
