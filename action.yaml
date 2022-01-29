@@ -49,7 +49,8 @@ inputs:
     required: false
   path:
     description: |
-      Relative path to the working directory in $GITHUB_WORKSPACE staticcheck should be executed in.
+      Relative path to the working directory Staticcheck should be executed in.
+      This is useful when dealing with multiple projects within one repository.
     required: false
     default: "."
 
