@@ -54,7 +54,7 @@ jobs:
         version: "2021.1.1"
         install-go: false
         cache-key: ${{ matrix.go }}
-        path: ${{ matrix.dir }}
+        working-directory: ${{ matrix.dir }}
 ```
 
 
@@ -99,7 +99,7 @@ The action itself requires at least Go 1.16.
 String to include in the cache key, in addition to the default, which is `runner.os`.
 This is useful when using multiple Go versions.
 
-### `path`
+### `working-directory`
 
 Relative path to the working directory Staticcheck should be executed in.
 This is useful when dealing with multiple projects within one repository.

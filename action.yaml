@@ -47,7 +47,7 @@ inputs:
       String to include in the cache key, in addition to the default, which is runner.os.
       This is useful when using multiple Go versions.
     required: false
-  path:
+  working-directory:
     description: |
       Relative path to the working directory Staticcheck should be executed in.
       This is useful when dealing with multiple projects within one repository.
@@ -76,7 +76,7 @@ runs:
         buildTags: ${{ inputs.build-tags }}
         minGoVersion: ${{ inputs.min-go-version }}
         checks: ${{ inputs.checks }}
-      working-directory: ${{ inputs.path }}
+      working-directory: ${{ inputs.working-directory }}
       run: |
         export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
         go install "honnef.co/go/tools/cmd/staticcheck@${version}"
