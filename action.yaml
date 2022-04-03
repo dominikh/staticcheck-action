@@ -25,6 +25,7 @@ inputs:
       See https://staticcheck.io/docs/running-staticcheck/cli/#go
       for more information.
     required: false
+    default: "module"
   build-tags:
     description: "Build tags"
     required: false
@@ -53,6 +54,21 @@ inputs:
       This is useful when dealing with multiple projects within one repository.
     required: false
     default: "."
+  output-format:
+    description: |
+      Output format to use. This corresponds to Staticcheck's -f flag. Usually you will want to use the default
+      ("text"), as this format creates annotations on pull requests. When combining multiple runs with merge-files, you
+      want to use the "binary" format on the individual runs to create the inputs to the merge run.
+    required: false
+    default: "text"
+  output-file:
+    description: |
+      File to write Staticcheck's output to. Defaults to stdout.
+    required: false
+  merge-files:
+    description: |
+      A newline-separated list of files to pass to "staticcheck -merge".
+    required: false
 
 runs:
   using: "composite"
@@ -63,6 +79,7 @@ runs:
       with:
         go-version: "1.17.x"
     - uses: actions/cache@v2
+      if: ${{ inputs.merge-files == '' }}
       with:
         path: |
           ${{ runner.temp }}/staticcheck
@@ -76,14 +93,25 @@ runs:
         buildTags: ${{ inputs.build-tags }}
         minGoVersion: ${{ inputs.min-go-version }}
         checks: ${{ inputs.checks }}
+        format: ${{ inputs.output-format }}
+        file: ${{ inputs.output-file }}
+        merge: ${{ inputs.merge-files }}
       working-directory: ${{ inputs.working-directory }}
       run: |
         export STATICCHECK_CACHE="${{ runner.temp }}/staticcheck"
         go install "honnef.co/go/tools/cmd/staticcheck@${version}"
         echo "::add-matcher::$GITHUB_ACTION_PATH/matchers.json"
-        if [ -z "${minGoVersion}" ]; then
-          $(go env GOPATH)/bin/staticcheck -tags "${buildTags}" -checks "${checks}" ./...
+        write_output() {
+          if [ -z "${file}" ]; then
+            cat
+          else
+            cat >"${file}"
+          fi
+        }
+        if [ -z "${merge}" ]; then
+          $(go env GOPATH)/bin/staticcheck -tags "${buildTags}" -checks "${checks}" -f "${format}" -go "${minGoVersion}" ./... | write_output
         else
-          $(go env GOPATH)/bin/staticcheck -go "${minGoVersion}" -tags "${buildTags}" -checks "${checks}" ./...
+          IFS=$'\n'
+          $(go env GOPATH)/bin/staticcheck -checks "${checks}" -f "${format}" -merge ${merge} | write_output
         fi
       shell: bash
