@@ -78,7 +78,7 @@ runs:
       uses: WillAbides/setup-go-faster@v1.7.0
       with:
         go-version: "1.17.x"
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       if: ${{ inputs.merge-files == '' }}
       with:
         path: |
