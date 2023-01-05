@@ -19,9 +19,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - uses: dominikh/staticcheck-action@v1.2.0
+    - uses: dominikh/staticcheck-action@v1.3.0
       with:
-        version: "2022.1"
+        version: "2022.1.3"
 ```
 
 A more advanced example that runs tests, go vet and Staticcheck on multiple OSs and Go versions looks like this:
@@ -37,21 +37,21 @@ jobs:
       fail-fast: false
       matrix:
         os:  ["windows-latest", "ubuntu-latest", "macOS-latest"]
-        go:  ["1.16.x", "1.17.x"]
+        go:  ["1.18.x", "1.19.x"]
         dir: ["server", "client"]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - uses: WillAbides/setup-go-faster@v1.7.0
+    - uses: WillAbides/setup-go-faster@v1.8.0
       with:
         go-version: ${{ matrix.go }}
     - run: "go test ./..."
     - run: "go vet ./..."
-    - uses: dominikh/staticcheck-action@v1.2.0
+    - uses: dominikh/staticcheck-action@v1.3.0
       with:
-        version: "2022.1"
+        version: "2022.1.3"
         install-go: false
         cache-key: ${{ matrix.go }}
         working-directory: ${{ matrix.dir }}
