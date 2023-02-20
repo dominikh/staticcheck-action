@@ -40,7 +40,7 @@ inputs:
       Let the action install a version of Go appropriate for building and running Staticcheck.
       If set to false, the action expects you to have installed Go already.
       The latest release of Staticcheck works with the last two minor releases of Go.
-      The action itself requires at least Go 1.16.
+      The action itself requires at least Go 1.19.
     required: true
     default: true
   cache-key:
