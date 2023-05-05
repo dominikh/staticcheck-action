@@ -21,7 +21,7 @@ jobs:
         fetch-depth: 1
     - uses: dominikh/staticcheck-action@v1.3.0
       with:
-        version: "2022.1.3"
+        version: "2023.1.3"
 ```
 
 A more advanced example that runs tests, go vet and Staticcheck on multiple OSs and Go versions looks like this:
@@ -56,8 +56,6 @@ jobs:
         cache-key: ${{ matrix.go }}
         working-directory: ${{ matrix.dir }}
 ```
-
-
 
 Please see [GitHub's documentation on Actions](https://docs.github.com/en/actions) for extensive
 documentation on how to write and tweak workflows.
@@ -106,4 +104,3 @@ This is useful when dealing with multiple projects within one repository.
 
 Can be easily combined with a directory [`matrix`](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix),
 see the advanced example above.
-
