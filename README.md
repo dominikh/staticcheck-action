@@ -93,7 +93,6 @@ If Staticcheck is the only action in your job, this option can usually be left o
 If your job already installs Go prior to running Staticcheck, for example to run unit tests, it is best to set this option to `false`.
 
 The latest release of Staticcheck works with the last minor release of Go at the time.
-The action itself requires at least Go 1.16.
 
 ### `cache-key`
 
