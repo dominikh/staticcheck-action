@@ -44,7 +44,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 1
-    - uses: WillAbides/setup-go-faster@v1.8.0
+    - uses: WillAbides/setup-go-faster@v1.14.0
       with:
         go-version: ${{ matrix.go }}
     - run: "go test ./..."
