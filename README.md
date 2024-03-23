@@ -87,11 +87,11 @@ Go build tags that get passed to Staticcheck via the `-tags` flag.
 
 ### `install-go`
 
-Whether the action should install a suitable version of Go to install and run Staticcheck.
+Whether the action should install the latest version of Go to install and run Staticcheck.
 If Staticcheck is the only action in your job, this option can usually be left on its default value of `true`.
 If your job already installs Go prior to running Staticcheck, for example to run unit tests, it is best to set this option to `false`.
 
-The latest release of Staticcheck works with the last two minor releases of Go.
+The latest release of Staticcheck works with the last minor release of Go at the time.
 The action itself requires at least Go 1.16.
 
 ### `cache-key`
