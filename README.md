@@ -74,10 +74,11 @@ It defaults to `latest`, which installs the latest released version of Staticche
 
 ### `min-go-version`
 
-Minimum version of Go to support. This affects the diagnostics reported by Staticcheck,
-avoiding suggestions that are not applicable to older versions of Go.
+Minimum version of Go that Staticcheck will report diagnostics for. That is, some
+diagnostics don't apply to older versions of Go.
 
-If unset, this will default to the Go version specified in your go.mod.
+If unset, this will default to the Go version specified in your go.mod. The default is
+usually what you want.
 
 See https://staticcheck.io/docs/running-staticcheck/cli/#go for more information.
 
