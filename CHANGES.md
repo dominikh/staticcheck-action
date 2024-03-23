@@ -1,3 +1,10 @@
+# 1.3.1
+- Update README to be clearer
+- Update README to provide timeless examples
+- Update setup-go-faster dependency from v1.8.0 to v1.14.0
+- Update actions/cache dependency from v3 to v4
+- Update installed Go version from 1.19.x to "stable"
+
 # 1.3.0
 - Add the output-format option
 - Add the output-file option
