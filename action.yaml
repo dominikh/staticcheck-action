@@ -43,6 +43,11 @@ inputs:
       The action itself requires at least Go 1.16.
     required: true
     default: true
+  cache:
+    description: |
+      Used to specify whether caching is needed. Defaults to true.
+    required: false
+    default: true
   cache-key:
     description: |
       String to include in the cache key, in addition to the default, which is runner.os.
@@ -79,7 +84,7 @@ runs:
       with:
         go-version: "stable"
     - uses: actions/cache@v4
-      if: ${{ inputs.merge-files == '' }}
+      if: ${{ inputs.merge-files == '' && inputs.cache != 'false' }}
       with:
         path: |
           ${{ runner.temp }}/staticcheck
