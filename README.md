@@ -86,6 +86,11 @@ See https://staticcheck.io/docs/running-staticcheck/cli/#go for more information
 
 Go build tags that get passed to Staticcheck via the `-tags` flag.
 
+### `checks`
+
+Value to pass to Staticcheck in the `-checks` flag. This doesn't
+normally need to be set and defaults to `"inherit"`.
+
 ### `install-go`
 
 Whether the action should install the latest version of Go to install and run Staticcheck.
@@ -112,3 +117,18 @@ This is useful when dealing with multiple projects within one repository.
 Can be easily combined with a directory [`matrix`](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix),
 see the advanced example above.
 
+### `output-format`
+
+Output format to use. This corresponds to Staticcheck's `-f` flag. Usually you
+will want to use the default (`"text"`), as this format creates annotations on
+pull requests. When combining multiple runs with `merge-files`, you want to use
+the `"binary"` format on the individual runs to create the inputs to the merge
+run.
+
+### `output-file`
+
+File to write Staticcheck's output to. Defaults to stdout.
+
+### `merge-files`
+
+A newline-separated list of files to pass to `staticcheck -merge`.
