@@ -1,3 +1,8 @@
+# 1.4.0
+
+- Add `use-cache` option to disable automatic caching
+- Update README to document all options
+
 # 1.3.1
 - Update README to be clearer
 - Update README to provide timeless examples
