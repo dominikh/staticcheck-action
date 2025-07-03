@@ -43,6 +43,12 @@ inputs:
       The action itself requires at least Go 1.16.
     required: true
     default: true
+  use-cache:
+    description: |
+      If set to true (the default), this action will automatically save and
+      restore Staticcheck's cache using the actions/cache action.
+    required: false
+    default: true
   cache-key:
     description: |
       String to include in the cache key, in addition to the default, which is runner.os.
@@ -79,7 +85,7 @@ runs:
       with:
         go-version: "stable"
     - uses: actions/cache@v4
-      if: ${{ inputs.merge-files == '' }}
+      if: ${{ inputs.merge-files == '' && inputs.use-cache != 'false' }}
       with:
         path: |
           ${{ runner.temp }}/staticcheck

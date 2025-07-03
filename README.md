@@ -94,6 +94,11 @@ If your job already installs Go prior to running Staticcheck, for example to run
 
 The latest release of Staticcheck works with the last minor release of Go at the time.
 
+### `use-cache`
+
+If set to true (the default), this action will automatically save and
+restore Staticcheck's cache using the actions/cache action.
+
 ### `cache-key`
 
 String to include in the cache key, in addition to the default, which is `runner.os`.
